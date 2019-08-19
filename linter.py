@@ -9,6 +9,8 @@
 
 """This module exports the Erlc plugin class."""
 
+import logging
+
 from SublimeLinter.lint import Linter, util
 
 
@@ -17,6 +19,7 @@ class Erlc(Linter):
 
     executable = "erlc"
     tempfile_suffix = "-"
+    logger = logging.getLogger(__name__)
 
     # ERROR FORMAT # <file>:<line>: [Warning:|] <message> #
     regex = (
@@ -38,6 +41,7 @@ class Erlc(Linter):
 
         this func is overridden so we can handle included directories.
         """
+        self.logger.info("Starting to assemble lint command")
         command = ['erlc', '-W']
 
         settings = self.get_view_settings()
@@ -58,5 +62,6 @@ class Erlc(Linter):
         command.extend(["-o", output_dir])
 
         command.extend(["$file_on_disk"])
+        self.logger.info("Assembled lint command, command is join of following list:\n" + str(command))
 
         return command
