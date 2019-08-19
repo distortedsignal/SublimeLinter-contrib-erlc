@@ -32,7 +32,7 @@ class Erlc(Linter):
 
     defaults = {
         "include_dirs": [],
-        "selector": "source.erl, source.hrl"
+        "selector": "source.erlang"
     }
 
     def cmd(self):
