@@ -21,7 +21,7 @@ class Erlc(Linter):
     )
 
     executable = "erlc"
-    tempfile_suffix = "erl"
+    tempfile_suffix = "-"
 
     # ERROR FORMAT # <file>:<line>: [Warning:|] <message> #
     regex = (
@@ -33,7 +33,8 @@ class Erlc(Linter):
     error_stream = util.STREAM_STDOUT
 
     defaults = {
-        "include_dirs": []
+        "include_dirs": [],
+        "selector": "source.erl, source.hrl"
     }
 
     def cmd(self):
@@ -42,7 +43,7 @@ class Erlc(Linter):
 
         this func is overridden so we can handle included directories.
         """
-        command = [self.executable_path, '-W']
+        command = ['erlc', '-W']
 
         settings = self.get_view_settings()
         dirs = settings.get('include_dirs', [])
@@ -60,5 +61,7 @@ class Erlc(Linter):
             command.extend(["-pz", d])
 
         command.extend(["-o", output_dir])
+
+        command.extend(["$file_on_disk"])
 
         return command
